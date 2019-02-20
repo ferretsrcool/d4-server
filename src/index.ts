@@ -1,14 +1,17 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
-import { PORT } from './config';
+// tslint:disable-next-line:import-name
+import route from './routes';
+
+import { PORT, DB_URL } from './config';
 
 const app: express.Application = express();
 
-import { helloWorld } from './helloWorld';
+mongoose.connect(DB_URL, { useNewUrlParser: true });
 
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.json({ message: helloWorld() });
-});
+// Initialize routes.
+route(app);
 
 app.listen(PORT, (err: Error) => {
   if (err) {
