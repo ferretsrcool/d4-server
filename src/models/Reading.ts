@@ -1,7 +1,10 @@
 import { Schema, model } from 'mongoose';
 
 const readingSchema: Schema = new Schema({
-  user: Number,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   samples: [Number],
 });
 
