@@ -23,9 +23,10 @@ readingRouter.get('/:id', (req: Request, res: Response) => {
 });
 
 readingRouter.post('/', (req: Request, res: Response) => {
+
   Reading.create({
     user: req.body.user,
-    samples: JSON.parse(req.body.samples),
+    samples: req.body.samples,
   })
   .then((reading: Document) => res.status(201).send(reading))
   .catch((err: Error) => res.status(400).send(err));
