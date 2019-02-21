@@ -1,18 +1,29 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
-import { PORT } from './config';
+// tslint:disable-next-line:import-name
+import route from './routes';
+
+// tslint:disable-next-line:import-name
+import seedReadings from './models/seed/Reading';
+
+import { PORT, DB_URL, NODE_ENV } from './config';
 
 const app: express.Application = express();
 
-import { helloWorld } from './helloWorld';
+mongoose.connect(DB_URL, { useNewUrlParser: true });
 
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.json({ message: helloWorld() });
-});
+if (NODE_ENV !== 'production') {
+  seedReadings();
+}
+
+// Initialize routes.
+route(app);
 
 app.listen(PORT, (err: Error) => {
   if (err) {
     throw err;
   }
+  // tslint:disable-next-line:no-console
   console.log(`App is listening on port ${PORT}`);
 });
