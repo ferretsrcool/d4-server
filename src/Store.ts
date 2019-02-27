@@ -4,6 +4,14 @@ class Store {
 
   private static client: redis.RedisClient;
 
+  private static validateClientInitialised(reject: CallableFunction): boolean {
+    if(!this.client) {
+      reject(Error('Client must be initialised before class can be used'));
+      return false;
+    }
+    return true;
+  }
+
   public static init(options?: Object): Promise<void> {
 
     this.client = options ? redis.createClient(options) : redis.createClient();
@@ -19,6 +27,10 @@ class Store {
 
   public static addSample(sample: string): Promise<number> {
     return new Promise((resolve, reject) => {
+
+      if (!this.validateClientInitialised(reject)) {
+        return;
+      }
 
       if (typeof sample !== 'string') {
         reject(TypeError('Parameter sample must be of type string'));
@@ -38,6 +50,10 @@ class Store {
   public static getSamples(): Promise<string[]> {
     return new Promise((resolve, reject) => {
 
+      if (!this.validateClientInitialised(reject)) {
+        return;
+      }
+
       this.client.lrange('samples', 0, -1, (err: Error | null, samples: string[]) => {
         if (err) {
           reject(err);
@@ -50,6 +66,10 @@ class Store {
 
   public static dropSamples(): Promise<void> {
     return new Promise((resolve, reject) => {
+
+      if (!this.validateClientInitialised(reject)) {
+        return;
+      }
 
       this.client.del('samples', (err: Error | null) => {
         if (err) {

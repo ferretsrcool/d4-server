@@ -6,6 +6,9 @@ import cors from 'cors';
 // tslint:disable-next-line:import-name
 import route from './routes';
 
+// Import volatile storage.
+import Store from './Store';
+
 // tslint:disable-next-line:import-name
 import seedReadings from './models/seed/Reading';
 
@@ -23,9 +26,15 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
   throw err;
 });
 
+// Initialise client.
+Store.init();
+
 // Seed the database if in development or testing environment.
 if (NODE_ENV !== 'production') {
-  seedReadings();
+  mongoose.connection.dropDatabase()
+  .then(() => {
+    seedReadings();
+  });
 }
 
 // Set up cors header.
