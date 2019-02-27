@@ -1,8 +1,15 @@
+// Rounting handled by express.
 import express from 'express';
+// Basic http server.
+import http from 'http';
+// Mongoose as ODM for mongodb.
 import mongoose from 'mongoose';
+
+
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+// Import routes configuration.
 // tslint:disable-next-line:import-name
 import route from './routes';
 
@@ -16,6 +23,7 @@ import seedReadings from './models/seed/Reading';
 import { PORT, DB_URL, NODE_ENV } from './config';
 
 const app: express.Application = express();
+const server: http.Server = http.createServer(app);
 
 // Connect to database.
 mongoose.connect(DB_URL, { useNewUrlParser: true })
@@ -46,7 +54,7 @@ app.use(bodyParser.json());
 // Initialize routes.
 route(app);
 
-app.listen(PORT, (err: Error) => {
+server.listen(PORT, (err: Error) => {
   if (err) {
     throw err;
   }
