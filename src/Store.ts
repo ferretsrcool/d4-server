@@ -5,7 +5,7 @@ class Store {
   private static client: redis.RedisClient;
 
   private static validateClientInitialised(reject: CallableFunction): boolean {
-    if(!this.client) {
+    if (!this.client) {
       reject(Error('Client must be initialised before class can be used'));
       return false;
     }
