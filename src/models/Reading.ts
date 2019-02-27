@@ -1,16 +1,10 @@
 import { Schema, model } from 'mongoose';
 
 const readingSchema: Schema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+  samples: {
+    type: [String],
     required: true,
   },
-  title: String,
-  samples: {
-    type: [Number],
-    required: true,
-  }
 }, {
   timestamps: true,
 });
