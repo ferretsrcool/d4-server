@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 // tslint:disable-next-line:import-name
 import route from './routes';
@@ -26,6 +27,9 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
 if (NODE_ENV !== 'production') {
   seedReadings();
 }
+
+// Set up cors header.
+app.use(cors());
 
 // Parse application/json.
 app.use(bodyParser.json());

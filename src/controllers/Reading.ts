@@ -6,7 +6,7 @@ import Reading from '../models/Reading';
 const readingRouter = Router();
 
 readingRouter.get('/', (req: Request, res: Response) => {
-  Reading.find({})
+  Reading.find({}, { updatedAt: 0, samples: 0, __v: 0 })
   .then((readings: Document[]) => res.status(200).send(readings))
   .catch((err: Error) => res.status(500).send(err));
 });
