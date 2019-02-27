@@ -3,6 +3,9 @@ import { Router, Request, Response } from 'express';
 // Import volatile storage model.
 import Store from '../Store';
 
+// Import client socket emitter.
+import Socket from '../Socket';
+
 // Import persistent storage models.
 import { Document } from 'mongoose';
 import Reading from '../models/Reading';
@@ -34,6 +37,8 @@ readingRouter.post('/:sample', (req: Request, res: Response) => {
 
   Store.addSample(req.params.sample)
   .then((listLength: number) => {
+
+    Socket.emitSample(req.params.sample);
     res.status(200).send(`Sample saved. ${listLength} samples currently stored.`);
   })
   .catch((err: Error) => res.status(400).send(err.message));
@@ -50,6 +55,7 @@ readingRouter.post('/', (req: Request, res: Response) => {
   })
   .then((reading: Document) => res.status(201).send(reading))
   .then(() => Store.dropSamples())
+  .then(() => Socket.emitRefreshHistory())
   .catch((err: Error) => res.status(400).send(err.message));
 });
 
