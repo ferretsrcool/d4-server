@@ -10,7 +10,7 @@ const readingSchema: Schema = new Schema({
   samples: {
     type: [Number],
     required: true,
-  }
+  },
 }, {
   timestamps: true,
 });
