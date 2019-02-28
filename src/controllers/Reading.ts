@@ -53,9 +53,11 @@ readingRouter.post('/', (req: Request, res: Response) => {
     }
     return Reading.create({ samples });
   })
-  .then((reading: Document) => res.status(201).send(reading))
-  .then(() => Store.dropSamples())
-  .then(() => Socket.emitRefreshHistory())
+  .then((reading: Document) => {
+    res.status(201).send(reading);
+    Socket.emitReading(reading);
+    Store.dropSamples();
+  })
   .catch((err: Error) => res.status(400).send(err.message));
 });
 
