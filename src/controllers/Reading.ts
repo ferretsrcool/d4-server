@@ -18,6 +18,17 @@ readingRouter.get('/', (req: Request, res: Response) => {
   .catch((err: Error) => res.status(500).send(err.message));
 });
 
+readingRouter.get('/samples', (req: Request, res: Response) => {
+  Store.getSamples()
+  .then((samples: string[]) => {
+    if (samples.length <= 0) {
+      throw Error('No samples at the moment.');
+    }
+    res.status(200).send(samples);
+  })
+  .catch((err: Error) => res.status(400).send(err.message));
+});
+
 readingRouter.get('/:id', (req: Request, res: Response) => {
   Reading.findById(req.params.id)
   .then((reading: Document | null) => {
